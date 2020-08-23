@@ -44,6 +44,17 @@
 npm install
 ```
 
+## 初始化mysql数据库
+安装并配置好mysql数据库`todo_development`，并且安装好`sequelize`依赖后，
+在项目`todo_api/db`目录下执行如下操作
+```
+npx sequelize db:migrate
+```
+完成`todo_development`数据库的初始化，这条命令会将`todo_api/db/migrations`目录下的`20200823035851-create-todo.js`中的模型Todos导入到`todo_development`数据库中，
+其中定义了Todos模型，使用这条命令后会在数据库中新增一张Todos表。
+
+
+
 ## 运行项目
 ```npm
 npm start
