@@ -65,14 +65,17 @@ router.post('/update', async (req,res,next)=>{
         id
       }
     })
-    if (todo) {
-      // 执行任务更新
-      todo = await todo.update({
-        name,
-        deadline,
-        content
+    if (!todo) {
+      return res.json({
+        message: `任务${id}不存在`
       })
     }
+    // 执行任务更新
+    todo = await todo.update({
+      name,
+      deadline,
+      content
+    })
     res.json({
       todo,
       message: '修改任务成功'
@@ -87,32 +90,61 @@ router.post('/update', async (req,res,next)=>{
  * 修改任务的状态 （ID/状态--待办/完成）
  */
 router.post('/update_status', async (req,res,next)=>{
-  let { id, status } = req.body;
-  let todo = await models.Todo.findOne({
-    where: {
-      id
-    }
-  })
-  if (todo && status != todo.status) {
-    // 执行更新
-    todo = await todo.update({
-      status
+  try {
+    let { id, status } = req.body;
+    let todo = await models.Todo.findOne({
+      where: {
+        id
+      }
     })
+    if (todo && status != todo.status) {
+      // 执行更新
+      todo = await todo.update({
+        status
+      })
+    } else {
+      return res.json({
+        message: `任务${id}不存在或者修改的status和原来的status相同!`
+      })
+    }
+    res.json({
+      todo
+    })
+  } catch (error) {
+    next(error)
   }
-  res.json({
-    todo
-  })
+ 
 })
 
 /**
  * 删除一个todo任务
  */
-router.post('/delete',(req,res,next)=>{
-  let { id } = req.body;
-  res.json({
-    todo,
-    id
-  })
+router.delete('/delete/:id', async (req,res,next)=>{
+  try {
+    let { id } = req.params;
+    let todo = await models.Todo.findOne({
+      where: {
+        id
+      }
+    })
+    if (!todo) {
+      return res.json({
+        message: `任务${id}不存在`
+      })
+    }
+    if (todo) {
+      // 执行更新
+      todo = await todo.destroy({
+      })
+    }
+    if (todo == null) {
+      res.json({
+        message: `任务${id}删除成功`
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router
