@@ -51,6 +51,63 @@ npm start
 
 ## 使用postman等http接口工具进行测试
 
+### 使用 [postman](https://www.postman.com/)进行API接口测试
+
+### 使用VSCode RestClient插件进行测试
+在VSCode中安装好RestClient插件后，在根目录下编写一个` api.http `的文件，并写入如下代码：
+```RestClient
+### 使用RestClient VSCode插件进行后端API接口测试
+@baseurl = http://127.0.0.1:3000
+
+### 根路径接口测试
+GET  {{baseurl}}
+
+### 获取status为2，page为1的任务列表数据
+GET {{baseurl}}/todo/list/2/1
+
+### 获取所有的任务数据（status为-1，page为2的任务列表数据）
+GET {{baseurl}}/todo/list/-1/2
+
+### 发送JSON数据
+
+### 新增任务
+POST {{baseurl}}/todo/create
+Content-Type: application/json
+
+{
+    "name": "修手机",
+    "deadline": "2020-08-23 17:00:00",
+    "content": "帮老板修手机 下午5点前要完成"
+}
+
+### 修改任务
+POST {{baseurl}}/todo/update
+Content-Type: application/json
+
+{
+     "id": 5,
+     "name": "学习任务005",
+     "deadline": "2020-08-23T07:16:00.000Z",
+     "content": "帮助小明补习功课"
+}
+
+
+### 修改任务的状态 
+
+POST {{baseurl}}/todo/update_status
+Content-Type: application/json
+
+{
+    "id": 8,
+    "status": 3
+}
+
+### 删除一个id为8的任务
+DELETE {{baseurl}}/todo/delete/8
+
+```
+
+
 # 参考资料
 - [Nodejs全栈入门-慕课网视频教程](https://www.imooc.com/learn/1199)
 - [Sequelize ORM](https://sequelize.org/)
